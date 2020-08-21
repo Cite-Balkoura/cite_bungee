@@ -1,0 +1,21 @@
+SQL:
+  host: "localhost"
+  db-user: "minecraft"
+  user: "minecraft"
+  log: "123"
+#
+
+redis:
+  host: "localhost"
+  port: "6379"
+  auth: ""
+  thischannel: "bungee"
+  debug: false
+#
+other:
+  debug_exeptions: false
+#
+configs:
+  chat:
+    safe_chat: true
+#

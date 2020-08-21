@@ -1,0 +1,6 @@
+name: Cite-bungee
+author: MileKat
+main: fr.milekat.cite_bungee.MainBungee
+version: '1.0'
+api-version: '1.15'
+description: plugin cite au émeraudes par MileKat
