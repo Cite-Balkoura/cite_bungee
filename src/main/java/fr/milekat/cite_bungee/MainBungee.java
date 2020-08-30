@@ -32,7 +32,7 @@ import java.util.*;
 public class MainBungee extends Plugin {
     // Core
     public static Date maintenance = DateMilekat.getDate("01/01/2020 00:00:00");
-    public final static Date opendate = DateMilekat.getDate("15/08/2020 14:00:00");
+    public final static Date opendate = DateMilekat.getDate("21/10/2020 14:00:00");
     public static final String prefixCmd = "§6[§2Balkoura§6]§r ";
     public static final String prefixConsole = "[Balkoura] ";
     public static final String SQLPREFIX = "balkoura_";
