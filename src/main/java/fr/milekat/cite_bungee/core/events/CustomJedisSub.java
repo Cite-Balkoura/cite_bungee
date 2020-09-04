@@ -23,12 +23,12 @@ public class CustomJedisSub extends Event {
     }
 
     public String getCommand() {
-        String[] args = redisMsg.split(":");
+        String[] args = redisMsg.split("#:#");
         return args[0];
     }
 
     public String[] getMessage() {
-        String[] args = redisMsg.split(":");
+        String[] args = redisMsg.split("#:#");
         return Arrays.copyOfRange(args,1,args.length);
     }
 }
