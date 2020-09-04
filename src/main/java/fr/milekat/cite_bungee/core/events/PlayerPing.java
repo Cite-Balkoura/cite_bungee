@@ -14,10 +14,10 @@ import java.util.Date;
 public class PlayerPing implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void proxyPing(ProxyPingEvent event) {
-        if (MainBungee.opendate.getTime() > new Date().getTime()) {
-            final ServerPing ping = event.getResponse();
-            ping.setDescriptionComponent(new TextComponent(MainBungee.prefixCmd +
-                    "§6Serveur en préparation§c.\n" +
+        final ServerPing ping = event.getResponse();
+        if (MainBungee.opendate!=null  && MainBungee.opendate.getTime() > new Date().getTime()) {
+            ping.setDescriptionComponent(new TextComponent(
+                    MainBungee.prefixCmd + "§6Serveur en préparation§c.\n" +
                     "§6Retrouvez nous sur§c: §b§nweb.cite-balkoura.fr"));
             ping.getVersion().setProtocol(1);
             ping.getVersion().setName("En préparation");
@@ -25,11 +25,9 @@ public class PlayerPing implements Listener {
                     new ServerPing.PlayerInfo("§6Ouverture dans§c:", ""),
                     new ServerPing.PlayerInfo("§b" + DateMilekat.reamingToStrig(MainBungee.opendate), "")
             });
-            event.setResponse(ping);
-        } else if (MainBungee.maintenance.getTime() > new Date().getTime()) {
-            final ServerPing ping = event.getResponse();
-            ping.setDescriptionComponent(new TextComponent(MainBungee.prefixCmd +
-                    "§6Serveur en maintenance§c.\n" +
+        } else if (MainBungee.maintenance!=null && MainBungee.maintenance.getTime() > new Date().getTime()) {
+            ping.setDescriptionComponent(new TextComponent(
+                    MainBungee.prefixCmd + "§6Serveur en maintenance§c.\n" +
                     "§6Retrouvez nous sur§c: §b§nweb.cite-balkoura.fr"));
             ping.getVersion().setProtocol(1);
             ping.getVersion().setName("En maintenance");
@@ -37,7 +35,11 @@ public class PlayerPing implements Listener {
                     new ServerPing.PlayerInfo("§6Ré-ouverture dans§c:", ""),
                     new ServerPing.PlayerInfo("§b" + DateMilekat.reamingToStrig(MainBungee.maintenance), "")
             });
-            event.setResponse(ping);
+        } else {
+            ping.setDescriptionComponent(new TextComponent(
+                    MainBungee.prefixCmd + "§6Évent cité au §2émeraudes §b[EN COURS]§c.\n" +
+                    "§6Web§c: §b§nweb.cite-balkoura.fr§6 - jusqu'au §c31/10/2020"));
         }
+        event.setResponse(ping);
     }
 }
