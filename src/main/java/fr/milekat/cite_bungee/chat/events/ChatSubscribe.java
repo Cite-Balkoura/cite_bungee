@@ -18,20 +18,12 @@ public class ChatSubscribe implements Listener {
     public void onSubChat(CustomJedisSub event) {
         String[] msg = event.getMessage();
         switch (event.getCommand()) {
-            case "new_msg": {
-                try {
-                    chatSend.sendChatFor("all", Integer.parseInt(msg[0]), false);
-                } catch (SQLException throwables) {
-                    MainBungee.warning("Erreur SQL Sub:new_msg.");
-                    if (MainBungee.logDebug) throwables.printStackTrace();
-                }
-                break;
-            }
+            case "new_msg":
             case "new_mp": {
                 try {
                     chatSend.sendChatFor("all", Integer.parseInt(msg[0]), false);
                 } catch (SQLException throwables) {
-                    MainBungee.warning("Erreur SQL Sub:new_mp.");
+                    MainBungee.warning("Erreur SQL Sub:new_msg ou new_mp.");
                     if (MainBungee.logDebug) throwables.printStackTrace();
                 }
                 break;

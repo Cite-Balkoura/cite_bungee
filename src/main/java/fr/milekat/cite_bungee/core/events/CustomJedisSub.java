@@ -29,7 +29,6 @@ public class CustomJedisSub extends Event {
 
     public String[] getMessage() {
         String[] args = redisMsg.split(":");
-        String[] message = Arrays.copyOfRange(args,1,args.length);
-        return message;
+        return Arrays.copyOfRange(args,1,args.length);
     }
 }
