@@ -4,9 +4,9 @@ import fr.milekat.cite_bungee.MainBungee;
 import fr.milekat.cite_bungee.utils_tools.DateMilekat;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.Connection;
@@ -47,7 +47,7 @@ public class ChatFormat {
     public TextComponent playerChatDisplay(String name, String hoverMsg, String prefix) {
         TextComponent Name = new TextComponent(prefix + name);
         Name.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', hoverMsg)).create()));
+                new Text(ChatColor.translateAlternateColorCodes('&', hoverMsg))));
         return Name;
     }
 
@@ -71,27 +71,27 @@ public class ChatFormat {
             //Bouton pour supprimer le msg
             TextComponent DelButton = new TextComponent(" [X]");
             DelButton.setColor(ChatColor.RED);
-            DelButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Supprimer ce message ?").create()));
+            DelButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.RED + "Supprimer ce message ?")));
             DelButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/removemsg " + id));
             Chat.addExtra(DelButton);
             //Bouton pour mute le joueur
             if (mute.equals("pas mute")) {
                 TextComponent MuteButton = new TextComponent(" [MUTE]");
                 MuteButton.setColor(ChatColor.RED);
-                MuteButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Mute 5 minutes").create()));
+                MuteButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.RED + "Mute 5 minutes")));
                 MuteButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mute " + sender + " " + "5m"));
                 Chat.addExtra(MuteButton);
             } else {
                 TextComponent unMuteButton = new TextComponent(" [UNMUTE]");
                 unMuteButton.setColor(ChatColor.RED);
-                unMuteButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Unmute le joueur").create()));
+                unMuteButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.RED + "Unmute le joueur")));
                 unMuteButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unmute " + sender));
                 Chat.addExtra(unMuteButton);
             }
         } else {
             TextComponent displayName = new TextComponent(ChatColor.RED + "<Message de " + sender + " supprimé par " + remove + ">");
             displayName.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', msg)).create()));
+                    new Text(ChatColor.translateAlternateColorCodes('&', msg))));
             Chat.addExtra(displayName);
         }
         return Chat;
@@ -219,12 +219,11 @@ public class ChatFormat {
         String query = "SELECT chat.msg_id as msg_id, chat.msg as msg, chat.msg_type as msg_type, chat.date_msg as date_msg, " +
                 "chat.dest_id as dest_id, removeby.name as remove_by, " +
                 //-- Sender info
-                "sender.name, sender.uuid, sender.player_pts_event, sender.muted as muted, COALESCE(CONCAT(senderLG.gprefix, ' '), '') as prefix, " +
-                "COALESCE(senderLG.gprefix, 'Membre') as rank, COALESCE(senderT.team_name, 'Pas d''équipe') as team_name, " +
+                "sender.name, sender.uuid, sender.player_pts_event, sender.muted as muted, " +
+                "COALESCE(senderT.team_name, 'Pas d''équipe') as team_name, " +
                 "COALESCE(senderT.team_tag, 'Pas d''équipe') as team_tag, COALESCE(senderT.money, 'Pas d''équipe') as money, " +
                 //-- Dest info
                 "dest.name as dest_name, dest.uuid as dest_uuid, dest.player_pts_event as dest_player_pts_event, dest.muted as dest_muted, " +
-                "COALESCE(CONCAT(destLG.gprefix, ' '), '') as dest_prefix, COALESCE(destLG.gprefix, 'Membre') as dest_rank, " +
                 "COALESCE(destT.team_name, 'Pas d''équipe') as dest_team_name, COALESCE(destT.team_tag, 'Pas d''équipe') as dest_team_tag, " +
                 "COALESCE(destT.money, 'Pas d''équipe') as dest_money " +
                 "FROM `" + MainBungee.SQLPREFIX + "chat` chat " +
@@ -262,12 +261,11 @@ public class ChatFormat {
         String query = "SELECT chat.msg_id as msg_id, chat.msg as msg, chat.msg_type as msg_type, chat.date_msg as date_msg, " +
                 "chat.dest_id as dest_id, removeby.name as remove_by, " +
                 //-- Sender info
-                "sender.name, sender.uuid, sender.player_pts_event, sender.muted, COALESCE(CONCAT(senderLG.gprefix, ' '), '') as prefix, " +
-                "COALESCE(senderLG.gprefix, 'Membre') as rank, COALESCE(senderT.team_name, 'Pas d''équipe') as team_name, " +
+                "sender.name, sender.uuid, sender.player_pts_event, sender.muted, " +
+                "COALESCE(senderT.team_name, 'Pas d''équipe') as team_name, " +
                 "COALESCE(senderT.team_tag, 'Pas d''équipe') as team_tag, COALESCE(senderT.money, 'Pas d''équipe') as money, " +
                 //-- Dest info
                 "dest.name as dest_name, dest.uuid as dest_uuid, dest.player_pts_event as dest_player_pts_event, dest.muted as dest_muted, " +
-                "COALESCE(CONCAT(destLG.gprefix, ' '), '') as dest_prefix, COALESCE(destLG.gprefix, 'Membre') as dest_rank, " +
                 "COALESCE(destT.team_name, 'Pas d''équipe') as dest_team_name, COALESCE(destT.team_tag, 'Pas d''équipe') as dest_team_tag, " +
                 "COALESCE(destT.money, 'Pas d''équipe') as dest_money " +
                 "FROM `" + MainBungee.SQLPREFIX + "chat` chat " +

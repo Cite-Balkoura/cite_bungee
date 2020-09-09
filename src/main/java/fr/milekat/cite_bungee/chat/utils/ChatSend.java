@@ -4,15 +4,16 @@ import fr.milekat.cite_bungee.MainBungee;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ChatSend {
     private final ChatFormat chatFormat;
@@ -64,7 +65,7 @@ public class ChatSend {
         // Création du Hover
         String hover = chatFormat.infoPlayerBuilder(
                 q.getResultSet().getString("name"),
-                q.getResultSet().getString("rank"),
+                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
                 q.getResultSet().getString("team_name"),
                 q.getResultSet().getString("money"),
                 q.getResultSet().getString("player_pts_event"),
@@ -111,7 +112,7 @@ public class ChatSend {
     private void genralMessage(PreparedStatement q, String hover, String pString) throws SQLException {
         // Message pour Mods on
         TextComponent ModsMsg = chatFormat.chatModsBuilder(
-                ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("prefix")),
+                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
                 q.getResultSet().getString("name"),
                 ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg")),
                 hover,
@@ -120,7 +121,7 @@ public class ChatSend {
                 q.getResultSet().getString("muted"));
         // Message pour joueur
         TextComponent PlayerMsg = chatFormat.chatPlayerBuilder(
-                ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("prefix")),
+                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
                 q.getResultSet().getString("name"),
                 ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg")),
                 hover,
@@ -153,8 +154,8 @@ public class ChatSend {
             }
         } else {
             TextComponent Mute = new TextComponent(ChatColor.RED + "" + ChatColor.BOLD + "[Mute] ");
-            Mute.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§cLes modos peuvent"
-                    + System.lineSeparator() + "encore voir vos" + System.lineSeparator() + "messages !").create()));
+            Mute.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§cLes modos peuvent"
+                    + System.lineSeparator() + "encore voir vos" + System.lineSeparator() + "messages !")));
             Mute.addExtra(ModsMsg);
             if (pString.equals("all")) {
                 for (ProxiedPlayer onlineP : ProxyServer.getInstance().getPlayers()) {
@@ -183,7 +184,7 @@ public class ChatSend {
         // Création du Hover du destinataire
         String HoverDest = chatFormat.infoPlayerBuilder(
                 q.getResultSet().getString("dest_name"),
-                q.getResultSet().getString("dest_rank"),
+                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("dest_uuid"))),
                 q.getResultSet().getString("dest_team_name"),
                 q.getResultSet().getString("dest_money"),
                 q.getResultSet().getString("dest_player_pts_event"),
@@ -340,7 +341,7 @@ public class ChatSend {
     private void eventMessage(PreparedStatement q, String hover, String pString) throws SQLException {
         TextComponent ModsMsg = new TextComponent("§6[Event]");
         ModsMsg.addExtra(chatFormat.chatModsBuilder(
-                ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("prefix")),
+                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
                 q.getResultSet().getString("name"),
                 ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg")),
                 hover,
@@ -350,7 +351,7 @@ public class ChatSend {
         // Message pour joueur
         TextComponent PlayerMsg = new TextComponent("§6[Event]");
         PlayerMsg.addExtra(chatFormat.chatPlayerBuilder(
-                ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("prefix")),
+                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
                 q.getResultSet().getString("name"),
                 ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg")),
                 hover,
@@ -389,7 +390,7 @@ public class ChatSend {
     private TextComponent addDiscord(TextComponent msg){
         TextComponent var = new TextComponent(ChatColor.BLUE + "(D)");
         var.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(ChatColor.BLUE + "Accéder au Discord").create()));
+                new Text(ChatColor.BLUE + "Accéder au Discord")));
         var.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/3q2f53E"));
         var.addExtra(msg);
         return var;

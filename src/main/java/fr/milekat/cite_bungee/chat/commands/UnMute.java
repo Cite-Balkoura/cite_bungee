@@ -1,7 +1,7 @@
 package fr.milekat.cite_bungee.chat.commands;
 
 import fr.milekat.cite_bungee.MainBungee;
-import fr.milekat.cite_bungee.core.Jedis.JedisPub;
+import fr.milekat.cite_bungee.core.jedis.JedisPub;
 import fr.milekat.cite_bungee.core.obj.Profil;
 import fr.milekat.cite_bungee.utils_tools.Web;
 import net.md_5.bungee.api.CommandSender;

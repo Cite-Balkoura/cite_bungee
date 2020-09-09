@@ -1,7 +1,7 @@
 package fr.milekat.cite_bungee.core.engines;
 
 import fr.milekat.cite_bungee.MainBungee;
-import fr.milekat.cite_bungee.core.Jedis.JedisPub;
+import fr.milekat.cite_bungee.core.jedis.JedisPub;
 import fr.milekat.cite_bungee.utils_tools.DateMilekat;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;

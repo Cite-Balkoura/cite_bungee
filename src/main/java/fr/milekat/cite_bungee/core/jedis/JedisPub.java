@@ -1,4 +1,4 @@
-package fr.milekat.cite_bungee.core.Jedis;
+package fr.milekat.cite_bungee.core.jedis;
 
 import fr.milekat.cite_bungee.MainBungee;
 import net.md_5.bungee.api.ProxyServer;

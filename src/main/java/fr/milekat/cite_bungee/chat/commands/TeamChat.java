@@ -3,12 +3,12 @@ package fr.milekat.cite_bungee.chat.commands;
 import fr.milekat.cite_bungee.MainBungee;
 import fr.milekat.cite_bungee.chat.utils.ChatFormat;
 import fr.milekat.cite_bungee.chat.utils.ChatSend;
-import fr.milekat.cite_bungee.core.Jedis.JedisPub;
+import fr.milekat.cite_bungee.core.jedis.JedisPub;
 import fr.milekat.cite_bungee.utils_tools.DateMilekat;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -56,8 +56,8 @@ public class TeamChat extends Command {
     private void warnMute(ProxiedPlayer player) {
         String str = DateMilekat.reamingToStrig(DateMilekat.getDate(MainBungee.profiles.get(player.getUniqueId()).getMuted()));
         TextComponent Mute = new TextComponent(MainBungee.prefixCmd + "§6Vous serez unmute dans §b" + str + "§c.");
-        Mute.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("§cLes modos peuvent" +
-                System.lineSeparator() + "encore voir vos" + System.lineSeparator() + "messages").create()));
+        Mute.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new Text("§cLes modos peuvent" +
+                System.lineSeparator() + "encore voir vos" + System.lineSeparator() + "messages")));
         player.sendMessage(Mute);
     }
 }
