@@ -249,9 +249,13 @@ public class ChatSend {
      * @param pString joueur cible (Ou all)
      */
     private void annonceMessage(PreparedStatement q, String pString) throws SQLException {
-        String msg = "§2↢----------↣" + System.lineSeparator() + "§2◤" + System.lineSeparator() +
-                "   " + q.getResultSet().getString("msg") + System.lineSeparator() +
-                "§2◣" + System.lineSeparator() + "§2↢----------↣";
+        StringBuilder annonce = new StringBuilder();
+        for (String msg : q.getResultSet().getString("msg").split("(?<=\\G.{35,}\\s)")) {
+            annonce.append("   ").append(ChatColor.translateAlternateColorCodes('&', msg)).append(System.lineSeparator());
+        }
+        String msg = "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §2[§6Annonce Cité§7§2]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r" + System.lineSeparator()
+                + System.lineSeparator() + annonce + System.lineSeparator() +
+                "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §2[§6Annonce Cité§7§2]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r";
         if (pString.equalsIgnoreCase("all")) {
             for (ProxiedPlayer onlineP : ProxyServer.getInstance().getPlayers()) {
                 onlineP.sendMessage(new TextComponent(msg));
