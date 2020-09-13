@@ -32,12 +32,12 @@ public class Reply extends Command {
         ChatSend chatSend = new ChatSend();
         Connection connection = MainBungee.getInstance().getSql().getConnection();
         try {
-            PreparedStatement q = connection.prepareStatement("SELECT `" + MainBungee.SQLPREFIX +
-                    "msg_id`, `dest_id` FROM `" + MainBungee.SQLPREFIX + "chat` WHERE `msg_type` = '2' AND `player_id` = " +
+            PreparedStatement q = connection.prepareStatement("SELECT `msg_id`, `dest_id` FROM `" +
+                    MainBungee.SQLPREFIX + "chat` WHERE `msg_type` = '2' AND `player_id` = " +
                     "(SELECT `player_id` FROM `" + MainBungee.SQLPREFIX + "player` WHERE `uuid` = '" + p.getUniqueId() +
                     "') ORDER BY `msg_id` DESC LIMIT 0, 1");
             q.execute();
-            PreparedStatement q2 = connection.prepareStatement("SELECT `" + MainBungee.SQLPREFIX + "msg_id`, `player_id` " +
+            PreparedStatement q2 = connection.prepareStatement("SELECT `msg_id`, `player_id` " +
                     "FROM `" + MainBungee.SQLPREFIX + "chat` WHERE `msg_type` = '2' AND `dest_id` = " +
                     "(SELECT `player_id` FROM `" + MainBungee.SQLPREFIX + "player` WHERE `uuid` = '" + p.getUniqueId() +
                             "') ORDER BY `msg_id` DESC LIMIT 0, 1");
