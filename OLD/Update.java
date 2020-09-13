@@ -1,13 +1,12 @@
 package fr.milekat.cite_bungee.core.engines;
 
-import fr.milekat.cite_bungee.core.jedis.JedisPub;
 import fr.milekat.cite_bungee.MainBungee;
 import fr.milekat.cite_bungee.MariaManage;
+import fr.milekat.cite_bungee.core.jedis.JedisPub;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.*;
 
 public class Update {
     public void Classement(){
