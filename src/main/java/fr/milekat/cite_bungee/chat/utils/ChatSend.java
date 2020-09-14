@@ -253,9 +253,9 @@ public class ChatSend {
         for (String msg : q.getResultSet().getString("msg").split("(?<=\\G.{35,}\\s)")) {
             annonce.append("   ").append(ChatColor.translateAlternateColorCodes('&', msg)).append(System.lineSeparator());
         }
-        String msg = "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §2[§6Annonce Cité§7§2]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r" + System.lineSeparator()
+        String msg = "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §7[§6Annonce Cité§7§7]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r" + System.lineSeparator()
                 + System.lineSeparator() + annonce + System.lineSeparator() +
-                "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §2[§6Annonce Cité§7§2]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r";
+                "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §7[§6Annonce Cité§7§7]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r";
         if (pString.equalsIgnoreCase("all")) {
             for (ProxiedPlayer onlineP : ProxyServer.getInstance().getPlayers()) {
                 onlineP.sendMessage(new TextComponent(msg));
