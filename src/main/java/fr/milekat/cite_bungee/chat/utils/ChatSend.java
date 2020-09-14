@@ -250,8 +250,18 @@ public class ChatSend {
      */
     private void annonceMessage(PreparedStatement q, String pString) throws SQLException {
         StringBuilder annonce = new StringBuilder();
-        for (String msg : q.getResultSet().getString("msg").split("(?<=\\G.{35,}\\s)")) {
-            annonce.append("   ").append(ChatColor.translateAlternateColorCodes('&', msg)).append(System.lineSeparator());
+        if (q.getResultSet().getString("msg").contains("%nl%")) {
+            for (String msg : q.getResultSet().getString("msg").split("%nl%")) {
+                annonce.append("   ")
+                        .append(ChatColor.translateAlternateColorCodes('&', msg))
+                        .append(System.lineSeparator());
+            }
+        } else {
+            for (String msg : q.getResultSet().getString("msg").split("(?<=\\G.{35,}\\s)")) {
+                if (msg.length() > 1) annonce.append("   ")
+                        .append(ChatColor.translateAlternateColorCodes('&', msg))
+                        .append(System.lineSeparator());
+            }
         }
         String msg = "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §7[§6Annonce Cité§7§7]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r" + System.lineSeparator()
                 + System.lineSeparator() + annonce + System.lineSeparator() +

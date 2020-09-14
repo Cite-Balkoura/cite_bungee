@@ -8,6 +8,7 @@ import fr.milekat.cite_bungee.chat.events.ChatMsg;
 import fr.milekat.cite_bungee.chat.events.ChatSubscribe;
 import fr.milekat.cite_bungee.core.commands.*;
 import fr.milekat.cite_bungee.core.engines.BanEngine;
+import fr.milekat.cite_bungee.core.engines.Classements;
 import fr.milekat.cite_bungee.core.engines.PlayersEngine;
 import fr.milekat.cite_bungee.core.events.JoinLeaveEvent;
 import fr.milekat.cite_bungee.core.events.PlayerPing;
@@ -54,6 +55,7 @@ public class MainBungee extends Plugin {
     private ScheduledTask annoncesTask;
     private ScheduledTask antispamTask;
     private ScheduledTask muteTask;
+    private ScheduledTask classmenets;
 
     // Vars du Main
     private static MainBungee mainBungee;
@@ -103,6 +105,7 @@ public class MainBungee extends Plugin {
         pm.registerListener(this, new ChatMsg());
         pm.registerListener(this, new ChatSubscribe());
         // Commandes
+        pm.registerCommand(this, new SendClassements());
         pm.registerCommand(this, new Broadcast());
         pm.registerCommand(this, new Chat());
         pm.registerCommand(this, new ModoChat());
@@ -119,6 +122,7 @@ public class MainBungee extends Plugin {
         annoncesTask = new Annonces().runTask();
         antispamTask = new AntiSpam().runTask();
         muteTask = new MuteEngine().runTask();
+        classmenets = new Classements().runTask();
         /* Jedis */
         jedis = new Jedis(config.getString("redis.host"),
                 Integer.parseInt(Objects.requireNonNull(config.getString("redis.port"))),
@@ -150,6 +154,7 @@ public class MainBungee extends Plugin {
         muteTask.cancel();
         banTask.cancel();
         profilesTask.cancel();
+        classmenets.cancel();
         subscriber.unsubscribe();
         sql.disconnect();
     }
