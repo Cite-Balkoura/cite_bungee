@@ -75,12 +75,14 @@ public class JoinLeaveEvent implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (!MainBungee.profiles.containsKey(uuid)) {
+        if (!MainBungee.profiles.containsKey(uuid) || MainBungee.profiles.get(uuid).getTeam()==0) {
             event.setCancelReason(new TextComponent(MainBungee.prefixCmd
                     + System.lineSeparator() +
                     "§cVous n'êtes pas inscrit !"
                     + System.lineSeparator() +
-                    "§6Vous devez vous inscrire directement sur le discord§c."
+                    "§6Vous devez vous inscrire directement sur le §9discord§c."
+                    + System.lineSeparator() +
+                    "§6Une fois inscrit, vous devrez intégrer une §béquipe§c."
                     + System.lineSeparator() +
                     "§9§ndiscord.gg/3q2f53E"
                     + System.lineSeparator() +
