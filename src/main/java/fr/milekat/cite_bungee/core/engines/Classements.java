@@ -20,10 +20,10 @@ public class Classements {
         return ProxyServer.getInstance().getScheduler().schedule(MainBungee.getInstance(), () -> {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
-            if (!(calendar.get(Calendar.HOUR_OF_DAY)==lasthour) && calendar.get(Calendar.HOUR_OF_DAY)==18) {
+            if (calendar.get(Calendar.HOUR_OF_DAY)!=lasthour && calendar.get(Calendar.HOUR_OF_DAY)==18) {
                 sendClassements();
             }
-            lasthour = calendar.get(Calendar.HOUR);
+            lasthour = calendar.get(Calendar.HOUR_OF_DAY);
         },0L,30L,TimeUnit.SECONDS);
     }
 
