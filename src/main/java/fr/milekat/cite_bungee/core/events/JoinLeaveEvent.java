@@ -78,7 +78,7 @@ public class JoinLeaveEvent implements Listener {
         if (!MainBungee.profiles.containsKey(uuid) || MainBungee.profiles.get(uuid).getTeam()==0) {
             event.setCancelReason(new TextComponent(MainBungee.prefixCmd
                     + System.lineSeparator() +
-                    "§cVous n'êtes pas inscrit !"
+                    "§cVous n'êtes pas inscrit/n'avez pas d'équipe!"
                     + System.lineSeparator() +
                     "§6Vous devez vous inscrire directement sur le §9discord§c."
                     + System.lineSeparator() +
