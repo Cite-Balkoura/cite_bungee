@@ -228,11 +228,11 @@ public class ChatFormat {
                 "COALESCE(destT.money, 'Pas d''équipe') as dest_money " +
                 "FROM `" + MainBungee.SQLPREFIX + "chat` chat " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` sender ON chat.player_id = sender.player_id " +
-                "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` dest ON chat.dest_id = dest.player_id " +
+                "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` dest ON chat.dest_id = dest.player_id " +/*
                 "LEFT JOIN luckperms_players senderLP ON sender.uuid = senderLP.uuid " +
                 "LEFT JOIN luckperms_groups senderLG ON senderLP.primary_group = senderLG.name " +
                 "LEFT JOIN luckperms_players destLP ON dest.uuid = destLP.uuid " +
-                "LEFT JOIN luckperms_groups destLG ON destLP.primary_group = destLG.name " +
+                "LEFT JOIN luckperms_groups destLG ON destLP.primary_group = destLG.name " +*/
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "team` senderT ON sender.team_id = senderT.team_id " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "team` destT ON dest.team_id = destT.team_id " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` removeby ON chat.remove_by = removeby.player_id " +
@@ -270,11 +270,11 @@ public class ChatFormat {
                 "COALESCE(destT.money, 'Pas d''équipe') as dest_money " +
                 "FROM `" + MainBungee.SQLPREFIX + "chat` chat " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` sender ON chat.player_id = sender.player_id " +
-                "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` dest ON chat.dest_id = dest.player_id " +
+                "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` dest ON chat.dest_id = dest.player_id " +/*
                 "LEFT JOIN luckperms_players senderLP ON sender.uuid = senderLP.uuid " +
                 "LEFT JOIN luckperms_groups senderLG ON senderLP.primary_group = senderLG.name " +
                 "LEFT JOIN luckperms_players destLP ON dest.uuid = destLP.uuid " +
-                "LEFT JOIN luckperms_groups destLG ON destLP.primary_group = destLG.name " +
+                "LEFT JOIN luckperms_groups destLG ON destLP.primary_group = destLG.name " +*/
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "team` senderT ON sender.team_id = senderT.team_id " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "team` destT ON dest.team_id = destT.team_id " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` removeby ON chat.remove_by = removeby.player_id " +
