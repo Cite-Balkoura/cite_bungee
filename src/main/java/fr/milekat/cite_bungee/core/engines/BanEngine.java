@@ -33,7 +33,8 @@ public class BanEngine {
                         if (time!=null && time.getTime() < System.currentTimeMillis()) {
                             UUID targetid = UUID.fromString(q.getResultSet().getString("uuid"));
                             PreparedStatement q2 = connection.prepareStatement("UPDATE `" + MainBungee.SQLPREFIX +
-                                    "player` SET `banned` = 'pas ban', `reason` = NULL WHERE `player`.`uuid` = ?;");
+                                    "player` SET `banned` = 'pas ban', `reason` = NULL WHERE `" + MainBungee.SQLPREFIX +
+                                    "player`.`uuid` = ?;");
                             q2.setString(1, targetid.toString());
                             q2.execute();
                             q2.close();
