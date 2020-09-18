@@ -42,7 +42,7 @@ public class Kick extends Command implements TabExecutor {
         // Définition du motif/raison de sanction
         StringBuilder sb = new StringBuilder();
         for (String loop : args){
-            if (!loop.equals(args[0]) && !loop.equals(args[1])){
+            if (!loop.equals(args[0])){
                 sb.append(loop);
                 sb.append(" ");
             }
