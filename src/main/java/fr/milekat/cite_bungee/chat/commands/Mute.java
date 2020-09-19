@@ -88,7 +88,7 @@ public class Mute extends Command implements TabExecutor {
         }
         MainBungee.info("Le joueur " + args[0] + " a été mute par " + sender.getName() + " jusqu'au " + muteDate + ".");
         JedisPub.sendRedis("log_sanction#:#mute#:#" + MainBungee.profiles.get(targetid).getDiscordid() + "#:#" +
-                modo_id + "#:#" + muteDate + "#:#" + motif);
+                modo_id + "#:#" + args[1] + "#:#" + muteDate + "#:#" + motif);
         if (target!=null && target.isConnected()) {
             target.sendMessage(new TextComponent(MainBungee.prefixCmd + "§cVous êtes mute jusqu'au §b" + muteDate + "§2."));
         }

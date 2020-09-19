@@ -64,7 +64,7 @@ public class UnBan extends Command implements TabExecutor {
             unbanPlayer(targetid);
             MainBungee.info("Le joueur " + args[0] + " a été unban par " + sender.getName() + ".");
             JedisPub.sendRedis("log_sanction#:#unban#:#" + MainBungee.profiles.get(targetid).getDiscordid() + "#:#" +
-                    modo_id + "#:#" + motif);
+                    modo_id + "#:#" + "null" + "#:#" + "null" + "#:#" + motif);
             sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§2Vous avez unban §b" + args[0] + "§2."));
         } catch (SQLException throwables) {
             MainBungee.warning("Erreur SQL lors de l'unban de: " + args[0]);
