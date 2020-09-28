@@ -45,13 +45,13 @@ public class RemoveMsg extends Command {
     private void setMessageToRemoved(ProxiedPlayer player, int id){
         Connection connection = MainBungee.getInstance().getSql().getConnection();
         try {
-            PreparedStatement q = connection.prepareStatement("UPDATE `" + MainBungee.SQLPREFIX + "chat` SET `remove_by`= " +
-                    "(SELECT `player_id` FROM `player` WHERE `uuid` = '" + player.getUniqueId() + "') " +
-                    "WHERE `msg_id` = '" + id + "';");
+            PreparedStatement q = connection.prepareStatement("UPDATE `" + MainBungee.SQLPREFIX +
+                    "chat` SET `remove_by`= (SELECT `player_id` FROM `" + MainBungee.SQLPREFIX +
+                    "player` WHERE `uuid` = '" + player.getUniqueId() + "') WHERE `msg_id` = '" + id + "';");
             q.execute();
             q.close();
         } catch (SQLException throwables) {
-            MainBungee.warning("Erreur lors de la suppression du message id :" + id + ".");
+            MainBungee.warning("Erreur lors de la suppression du message id: " + id + ".");
             if (MainBungee.logDebug) throwables.printStackTrace();
         }
     }
