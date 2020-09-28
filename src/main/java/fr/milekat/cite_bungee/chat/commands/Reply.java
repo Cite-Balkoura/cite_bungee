@@ -78,7 +78,7 @@ public class Reply extends Command {
      * @param sender joueur qui exécute la commande
      */
     private void sendHelp(CommandSender sender){
-        sender.sendMessage(new TextComponent(MainBungee.prefixCmd));
+        sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "Aide pour la commande reponse"));
         sender.sendMessage(new TextComponent(
                 "§6/r <Message>:§r envoyer un message privé à votre dernier correspondant."));
     }
