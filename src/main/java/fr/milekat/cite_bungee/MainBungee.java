@@ -184,7 +184,7 @@ public class MainBungee extends Plugin {
     }
 
     public static ArrayList<String> playerListFull(String arg) {
-        List<String> MyStrings = new ArrayList<>(MainBungee.joueurslist.keySet());
+        ArrayList<String> MyStrings = new ArrayList<>(MainBungee.joueurslist.keySet());
         ArrayList<String> MySortStrings =new ArrayList<>();
         for(int i = 0; i<MainBungee.profiles.keySet().size(); i++)
         {
@@ -197,14 +197,12 @@ public class MainBungee extends Plugin {
     }
 
     public static ArrayList<String> playerListOnline(String arg) {
-        List<String> MyStrings = null;
-        for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) MyStrings.add(player.getName());
+        ArrayList<String> MyStrings = new ArrayList<>();
         ArrayList<String> MySortStrings = new ArrayList<>();
-        if (!(MyStrings ==null)) {
-            for (String myString : MyStrings) {
-                if (myString.toLowerCase().startsWith(arg.toLowerCase())) {
-                    MySortStrings.add(myString);
-                }
+        for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) MyStrings.add(player.getName());
+        for (String myString : MyStrings) {
+            if (myString.toLowerCase().startsWith(arg.toLowerCase())) {
+                MySortStrings.add(myString);
             }
         }
         return MySortStrings;
