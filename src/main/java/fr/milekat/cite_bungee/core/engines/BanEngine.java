@@ -21,8 +21,8 @@ public class BanEngine {
         return ProxyServer.getInstance().getScheduler().schedule(MainBungee.getInstance(), () -> {
             Connection connection = MainBungee.getInstance().getSql().getConnection();
             try {
-                PreparedStatement q = connection.prepareStatement("SELECT `uuid`, `name`, `banned` FROM `" + MainBungee.SQLPREFIX +
-                        "player` WHERE `banned` != 'pas ban';");
+                PreparedStatement q = connection.prepareStatement("SELECT `uuid`, `name`, `banned` FROM `" +
+                        MainBungee.SQLPREFIX + "player` WHERE `banned` != 'pas ban';");
                 q.execute();
                 while (q.getResultSet().next()){
                     UUID uuid = UUID.fromString(q.getResultSet().getString("uuid"));
@@ -40,8 +40,9 @@ public class BanEngine {
                             q2.close();
                             MainBungee.info(q.getResultSet().getString("name") + " n'est plus ban !");
                             MainBungee.profiles.get(uuid).setBanned("pas ban");
-                            JedisPub.sendRedis("log_sanction#:#unban#:#" + MainBungee.profiles.get(targetid).getDiscordid() +
-                                    "#:#console#:#Fin du délai");
+                            JedisPub.sendRedis("log_sanction#:#unban#:#" +
+                                    MainBungee.profiles.get(targetid).getDiscordid() + "#:#console#:#Fin du délai" +
+                                    "#:#/unban " + MainBungee.profiles.get(uuid).getName() + " Fin du délai");
                         }
                     }
                 }

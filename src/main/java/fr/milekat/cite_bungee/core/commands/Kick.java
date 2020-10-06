@@ -56,7 +56,7 @@ public class Kick extends Command implements TabExecutor {
         // Action
         MainBungee.info("Le joueur " + args[0] + " a été kick par " + sender.getName() + " motif " + motif + ".");
         JedisPub.sendRedis("log_sanction#:#kick#:#" + MainBungee.profiles.get(targetid).getDiscordid() + "#:#" +
-                modo_id + "#:#" + "null" + "#:#" + "null" + "#:#" + motif);
+                modo_id + "#:#" + "null" + "#:#" + "null" + "#:#" + motif + "#:#" + "/kick" + args[0] + sb.toString());
         if (target!=null && target.isConnected()) target.disconnect(getKickMsg(motif));
         sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§2Vous avez kick §b" + args[0] + "§2."));
     }

@@ -24,8 +24,8 @@ public class MuteEngine {
         return ProxyServer.getInstance().getScheduler().schedule(MainBungee.getInstance(), () -> {
             Connection connection = MainBungee.getInstance().getSql().getConnection();
             try {
-                PreparedStatement q = connection.prepareStatement("SELECT `uuid`, `name`, `muted` FROM `" + MainBungee.SQLPREFIX +
-                        "player` WHERE `muted` != 'pas mute';");
+                PreparedStatement q = connection.prepareStatement("SELECT `uuid`, `name`, `muted` FROM `" +
+                        MainBungee.SQLPREFIX + "player` WHERE `muted` != 'pas mute';");
                 q.execute();
                 while (q.getResultSet().next()){
                     Date time = DateMilekat.getDate(q.getResultSet().getString("muted"));
@@ -46,7 +46,8 @@ public class MuteEngine {
                         MainBungee.info(q.getResultSet().getString("name") + " n'est plus mute !");
                         MainBungee.profiles.get(uuid).setMuted("pas mute");
                         JedisPub.sendRedis("log_sanction#:#unmute#:#" + MainBungee.profiles.get(uuid).getDiscordid() +
-                                "#:#console#:#Fin du délai");
+                                "#:#console#:#Fin du délai#:#/unmute " + MainBungee.profiles.get(uuid).getName() +
+                                " Fin du délai");
                     }
                 }
                 q.close();

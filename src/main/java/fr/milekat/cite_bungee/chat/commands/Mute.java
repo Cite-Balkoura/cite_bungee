@@ -14,7 +14,6 @@ import net.md_5.bungee.api.plugin.TabExecutor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -80,7 +79,7 @@ public class Mute extends Command implements TabExecutor {
         // Action
         try {
             mutePlayer(MainBungee.joueurslist.get(args[0]), muteDate);
-        } catch (SQLException | ParseException throwables) {
+        } catch (SQLException throwables) {
             MainBungee.warning("Erreur Java lors du mute de: " + args[0]);
             sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§cErreur Java lors du mute."));
             if (MainBungee.logDebug) throwables.printStackTrace();
@@ -88,7 +87,8 @@ public class Mute extends Command implements TabExecutor {
         }
         MainBungee.info("Le joueur " + args[0] + " a été mute par " + sender.getName() + " jusqu'au " + muteDate + ".");
         JedisPub.sendRedis("log_sanction#:#mute#:#" + MainBungee.profiles.get(targetid).getDiscordid() + "#:#" +
-                modo_id + "#:#" + args[1] + "#:#" + muteDate + "#:#" + motif);
+                modo_id + "#:#" + args[1] + "#:#" + muteDate + "#:#" + motif + "#:#" +
+                "/mute " + args[0] + sb.toString());
         if (target!=null && target.isConnected()) {
             target.sendMessage(new TextComponent(MainBungee.prefixCmd + "§cVous êtes mute jusqu'au §b" + muteDate + "§2."));
         }
@@ -110,7 +110,7 @@ public class Mute extends Command implements TabExecutor {
      * @param uuid du joueur ciblé
      * @param duration durée du ban (peut être def)
      */
-    private void mutePlayer(UUID uuid, String duration) throws SQLException, ParseException {
+    private void mutePlayer(UUID uuid, String duration) throws SQLException {
         Connection connection = MainBungee.getInstance().getSql().getConnection();
         PreparedStatement q = connection.prepareStatement("UPDATE `" + MainBungee.SQLPREFIX +
                 "player` SET `muted` = ? WHERE `uuid` = ?;");

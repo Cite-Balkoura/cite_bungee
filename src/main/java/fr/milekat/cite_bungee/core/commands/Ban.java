@@ -81,7 +81,7 @@ public class Ban extends Command implements TabExecutor {
         MainBungee.info("Le joueur " + args[0] + " a été ban par "
                 + sender.getName() + " jusqu'au " + banDate + ".");
         JedisPub.sendRedis("log_sanction#:#ban#:#" + MainBungee.profiles.get(targetid).getDiscordid() + "#:#" +
-                modo_id + "#:#" + args[1] + "#:#" + banDate + "#:#" + motif);
+                modo_id + "#:#" + args[1] + "#:#" + banDate + "#:#" + motif + "#:#" + "/ban" + args[0] + sb.toString());
         if (target!=null && target.isConnected()) target.disconnect(getBanMsg(target));
         sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§2Vous avez ban §b"
                 + args[0] + "§2 jusqu'au §b" + banDate + "§2."));
