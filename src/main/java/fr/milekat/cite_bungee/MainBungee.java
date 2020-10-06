@@ -186,11 +186,9 @@ public class MainBungee extends Plugin {
     public static ArrayList<String> playerListFull(String arg) {
         ArrayList<String> MyStrings = new ArrayList<>(MainBungee.joueurslist.keySet());
         ArrayList<String> MySortStrings =new ArrayList<>();
-        for(int i = 0; i<MainBungee.profiles.keySet().size(); i++)
-        {
-            if(MyStrings.get(i).toLowerCase().startsWith(arg.toLowerCase()))
-            {
-                MySortStrings.add(MyStrings.get(i));
+        for(String myString : MyStrings) {
+            if(myString.toLowerCase().startsWith(arg.toLowerCase())) {
+                MySortStrings.add(myString);
             }
         }
         return MySortStrings;
