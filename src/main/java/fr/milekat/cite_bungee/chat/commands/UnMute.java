@@ -64,8 +64,9 @@ public class UnMute extends Command implements TabExecutor {
         try {
             unmutePlayer(targetid);
             MainBungee.info("Le joueur " + args[0] + " a été unmute par " + sender.getName() + ".");
-            JedisPub.sendRedis("log_sanction#:#unmute#:#" + MainBungee.profiles.get(targetid).getDiscordid() + "#:#" +
-                    modo_id + "#:#" + "null" + "#:#" + "null" + "#:#" + motif);
+            JedisPub.sendRedis("log_sanction#:#unmute#:#" + MainBungee.profiles.get(targetid).getDiscordid() +
+                    "#:#" + modo_id + "#:#" + "null" + "#:#" + "null" + "#:#" + motif +
+                    "/unmute " + args[0] + " " + sb.toString());
             sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§2Vous avez unmute §b" + args[0] + "§2."));
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(targetid);
             if (player.isConnected()){

@@ -53,13 +53,15 @@ public class Mute extends Command implements TabExecutor {
         // Check si le joueur est un helper pour limiter à 1h le mute (3600000ms)
         if (!sender.hasPermission("modo.chat.command.mute")){
             if (time > (new Date().getTime()+3600000)){
-                sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§cDésolé mais tu ne peux pas mute un joueur de plus d'1h."));
+                sender.sendMessage(new TextComponent(MainBungee.prefixCmd +
+                        "§cDésolé mais tu ne peux pas mute un joueur de plus d'1h."));
                 return;
             }
         }
         // Check si le mute est plus petit que 10s (10000ms)
         if (time < (new Date().getTime()+10000)){
-            sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§cMerci d'indiquer un délais suppérieur à 10s."));
+            sender.sendMessage(new TextComponent(MainBungee.prefixCmd +
+                    "§cMerci d'indiquer un délais suppérieur à 10s."));
             return;
         }
         String muteDate = DateMilekat.setDate(new Date(time));
@@ -85,14 +87,17 @@ public class Mute extends Command implements TabExecutor {
             if (MainBungee.logDebug) throwables.printStackTrace();
             return;
         }
-        MainBungee.info("Le joueur " + args[0] + " a été mute par " + sender.getName() + " jusqu'au " + muteDate + ".");
+        MainBungee.info(
+                "Le joueur " + args[0] + " a été mute par " + sender.getName() + " jusqu'au " + muteDate + ".");
         JedisPub.sendRedis("log_sanction#:#mute#:#" + MainBungee.profiles.get(targetid).getDiscordid() + "#:#" +
                 modo_id + "#:#" + args[1] + "#:#" + muteDate + "#:#" + motif + "#:#" +
-                "/mute " + args[0] + sb.toString());
+                "/mute " + args[0] + " " + sb.toString());
         if (target!=null && target.isConnected()) {
-            target.sendMessage(new TextComponent(MainBungee.prefixCmd + "§cVous êtes mute jusqu'au §b" + muteDate + "§2."));
+            target.sendMessage(
+                    new TextComponent(MainBungee.prefixCmd + "§cVous êtes mute jusqu'au §b" + muteDate + "§2."));
         }
-        sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§2Vous avez mute §b" + args[0] + "§2 jusqu'au §b" + muteDate + "§2."));
+        sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§2Vous avez mute §b" + args[0] +
+                "§2 jusqu'au §b" + muteDate + "§2."));
     }
 
     /**
@@ -102,7 +107,8 @@ public class Mute extends Command implements TabExecutor {
     private void sendHelp(CommandSender sender){
         sender.sendMessage(new TextComponent(MainBungee.prefixCmd));
         sender.sendMessage(new TextComponent("§6/mute <Player> <Durée> <Raison>:§r mute le joueur avec motif."));
-        sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§6Format de la durée:§r §rx§bJ§rx§bh§rx§bm§rx§bs."));
+        sender.sendMessage(
+                new TextComponent(MainBungee.prefixCmd + "§6Format de la durée:§r §rx§bJ§rx§bh§rx§bm§rx§bs."));
     }
 
     /**
