@@ -1,6 +1,8 @@
 package fr.milekat.cite_bungee.chat.utils;
 
 import fr.milekat.cite_bungee.MainBungee;
+import fr.milekat.cite_bungee.core.obj.Profil;
+import fr.milekat.cite_bungee.core.obj.Team;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -9,7 +11,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -62,42 +63,50 @@ public class ChatSend {
      *               false sera envoyé au modos
      */
     public void sendSingleMessage(PreparedStatement q, String pString, boolean noMods) throws SQLException {
+        if (q.getResultSet().getInt("msg_type")==4) {
+            //  Annonces chat
+            annonceMessage(q, pString);
+            return;
+        }
+        // Récupération Profil & Équipe du sender
+        Profil senderProfil = MainBungee.profiles.getOrDefault
+                (UUID.fromString(q.getResultSet().getString("sender.uuid")), null);
+        Team senderTeam = MainBungee.teams.getOrDefault(senderProfil.getTeam(), null);
         // Création du Hover
         String hover = chatFormat.infoPlayerBuilder(
-                q.getResultSet().getString("name"),
-                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
-                q.getResultSet().getString("team_name"),
-                q.getResultSet().getString("money"),
-                q.getResultSet().getString("player_pts_event"),
+                senderProfil.getName(),
+                Prefix.getPrefix(senderProfil.getUuid()),
+                senderTeam.getName(),
+                String.valueOf(senderTeam.getMoney()),
+                senderProfil.getPoints_event(),
+                senderProfil.getPoints_quest(),
                 q.getResultSet().getString("date_msg"));
         switch (q.getResultSet().getInt("msg_type")) {
             //  Général
             case 1:
             //  Discord
             case 3: {
-                genralMessage(q, hover, pString);
+                genralMessage(q, hover, pString, senderProfil);
                 break;
             }
             //  Message privé
             case 2: {
-                privateMessage(q, hover, pString, noMods);
+                privateMessage(q, hover, pString, noMods, senderProfil);
                 break;
             }
-            //  Annonces chat
-            case 4: {
-                annonceMessage(q, pString);
-                break;
-            }
+            // Message de login
             case 5: {
-                loginMessage(q, pString);
+                loginMessage(q, pString, senderProfil);
                 break;
             }
+            // Chat Team
             case 6: {
-                teamMessage(q, hover, pString);
+                teamMessage(q, hover, pString, senderProfil, senderTeam);
                 break;
             }
+            // Chat Event
             case 7: {
-                eventMessage(q, hover, pString);
+                eventMessage(q, hover, pString, senderProfil);
                 break;
             }
         }
@@ -109,11 +118,11 @@ public class ChatSend {
      * @param hover infos
      * @param pString joueur à envooyé (ou all)
      */
-    private void genralMessage(PreparedStatement q, String hover, String pString) throws SQLException {
+    private void genralMessage(PreparedStatement q, String hover, String pString, Profil profil) throws SQLException {
         // Message pour Mods on
         TextComponent ModsMsg = chatFormat.chatModsBuilder(
-                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
-                q.getResultSet().getString("name"),
+                Prefix.getPrefix(profil.getUuid()),
+                profil.getName(),
                 ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg")),
                 hover,
                 q.getResultSet().getString("remove_by")+"",
@@ -121,8 +130,8 @@ public class ChatSend {
                 q.getResultSet().getString("muted"));
         // Message pour joueur
         TextComponent PlayerMsg = chatFormat.chatPlayerBuilder(
-                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
-                q.getResultSet().getString("name"),
+                Prefix.getPrefix(profil.getUuid()),
+                profil.getName(),
                 ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg")),
                 hover,
                 q.getResultSet().getString("remove_by")+"");
@@ -159,13 +168,13 @@ public class ChatSend {
             Mute.addExtra(ModsMsg);
             if (pString.equals("all")) {
                 for (ProxiedPlayer onlineP : ProxyServer.getInstance().getPlayers()) {
-                    if (onlineP.hasPermission("modo.mute.see")) {
+                    if (onlineP.hasPermission("modo.bungee.mute.see")) {
                         onlineP.sendMessage(Mute);
                     }
                 }
             } else {
                 ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pString);
-                if (player!=null && player.hasPermission("modo.mute.see")) {
+                if (player!=null && player.hasPermission("modo.bungee.mute.see")) {
                     player.sendMessage(Mute);
                 }
             }
@@ -180,28 +189,26 @@ public class ChatSend {
      * @param noMods pour éviter le double post sur les mods (false premier coup, true 2ème coup) ->
      *               false sera envoyé au modos
      */
-    private void privateMessage(PreparedStatement q, String hover, String pString, boolean noMods) throws SQLException {
+    private void privateMessage(PreparedStatement q, String hover, String pString, boolean noMods,
+                                Profil senderProfil) throws SQLException {
+        // Récupération Profil & Équipe du dest
+        Profil destProfil = MainBungee.profiles.getOrDefault
+                (UUID.fromString(q.getResultSet().getString("dest_uuid")),null);;
+        Team destTeam = MainBungee.teams.getOrDefault(destProfil.getTeam(),null);
         // Création du Hover du destinataire
-        String HoverDest = chatFormat.infoPlayerBuilder(
-                q.getResultSet().getString("dest_name"),
-                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("dest_uuid"))),
-                q.getResultSet().getString("dest_team_name"),
-                q.getResultSet().getString("dest_money"),
-                q.getResultSet().getString("dest_player_pts_event"),
+        String hoverDest = chatFormat.infoPlayerBuilder(
+                destProfil.getName(),
+                Prefix.getPrefix(destProfil.getUuid()),
+                destTeam.getName(),
+                String.valueOf(destTeam.getMoney()),
+                destProfil.getPoints_event(),
+                destProfil.getPoints_quest(),
                 q.getResultSet().getString("date_msg"));
-        TextComponent PrivateToMe = chatFormat.privateToMe(
-                hover,
-                q.getResultSet().getString("name"),
+        TextComponent PrivateToMe = chatFormat.privateToMe(hover, senderProfil.getName(),
                 q.getResultSet().getString("msg"));
-        TextComponent PrivateOfMe = chatFormat.privateOfMe(
-                HoverDest,
-                q.getResultSet().getString("dest_name"),
+        TextComponent PrivateOfMe = chatFormat.privateOfMe(hoverDest, destProfil.getName(),
                 q.getResultSet().getString("msg"));
-        TextComponent PrivateMods = chatFormat.privateMods(
-                hover,
-                q.getResultSet().getString("name"),
-                HoverDest,
-                q.getResultSet().getString("dest_name"),
+        TextComponent PrivateMods = chatFormat.privateMods(hover, senderProfil.getName(), hoverDest, destProfil.getName(),
                 q.getResultSet().getString("msg"));
         if (pString.equals("all")) {
             // Envoi du msg à tous les joueurs en ligne
@@ -210,10 +217,9 @@ public class ChatSend {
                     // Pour ceux avec /mods on
                     onlineP.sendMessage(PrivateMods);
                 } else {
-                    if (onlineP.getUniqueId().toString().equals(q.getResultSet().getString("uuid"))) {
+                    if (onlineP.getUniqueId().equals(senderProfil.getUuid())) {
                         onlineP.sendMessage(PrivateOfMe);
-                    } else if (onlineP.getUniqueId().toString().equals(
-                            q.getResultSet().getString("dest_uuid"))) {
+                    } else if (onlineP.getUniqueId().equals(destProfil.getUuid())) {
                         onlineP.sendMessage(PrivateToMe);
                     }
                 }
@@ -266,16 +272,7 @@ public class ChatSend {
         String msg = "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §7[§6Annonce Cité§7§7]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r" + System.lineSeparator()
                 + System.lineSeparator() + annonce + System.lineSeparator() +
                 "§r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r §7[§6Annonce Cité§7§7]§r §r§7§m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯§r";
-        if (pString.equalsIgnoreCase("all")) {
-            for (ProxiedPlayer onlineP : ProxyServer.getInstance().getPlayers()) {
-                onlineP.sendMessage(new TextComponent(msg));
-            }
-        } else {
-            ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pString);
-            if(player != null) {
-                player.sendMessage(new TextComponent(msg));
-            }
-        }
+        sendToAll(pString, msg);
     }
 
     /**
@@ -283,15 +280,19 @@ public class ChatSend {
      * @param q requête du message
      * @param pString joueur cible (Ou all)
      */
-    private void loginMessage(PreparedStatement q, String pString) throws SQLException {
+    private void loginMessage(PreparedStatement q, String pString, Profil senderProfil) throws SQLException {
         String msg;
         if (q.getResultSet().getString("msg").equalsIgnoreCase("join")) {
-            msg = MainBungee.prefixCmd + "§2" + q.getResultSet().getString("name") + "§6 a rejoint la cité.";
+            msg = MainBungee.prefixCmd + "§2" + senderProfil.getName() + "§6 a rejoint la cité.";
         } else if (q.getResultSet().getString("msg").equalsIgnoreCase("quit")) {
-            msg = MainBungee.prefixCmd + "§c" + q.getResultSet().getString("name") + "§6 a quitté la cité.";
+            msg = MainBungee.prefixCmd + "§c" + senderProfil.getName() + "§6 a quitté la cité.";
         } else {
             return;
         }
+        sendToAll(pString, msg);
+    }
+
+    private void sendToAll(String pString, String msg) {
         if (pString.equalsIgnoreCase("all")) {
             for (ProxiedPlayer onlineP : ProxyServer.getInstance().getPlayers()) {
                 onlineP.sendMessage(new TextComponent(msg));
@@ -310,39 +311,27 @@ public class ChatSend {
      * @param hover infos
      * @param pString joueur cible (Ou all)
      */
-    private void teamMessage(PreparedStatement q, String hover, String pString) throws SQLException {
+    private void teamMessage(PreparedStatement q, String hover, String pString, Profil profil, Team team) throws SQLException {
         // Message pour joueur
-        TextComponent playerChatDisplay =
-                chatFormat.playerChatDisplay(q.getResultSet().getString("name"),hover,"");
+        TextComponent playerChatDisplay = chatFormat.playerChatDisplay(profil.getName(), hover,"");
         String msg = ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg"));
-        TextComponent teamMsg = new TextComponent("§7[" + q.getResultSet().getString("team_name") + "] ");
+        TextComponent teamMsg = new TextComponent("§7[" + team.getName() + "] ");
         teamMsg.addExtra(playerChatDisplay);
         teamMsg.addExtra("§r §b»§r " + msg);
-        Connection connection = MainBungee.getInstance().getSql().getConnection();
-        try {
-            PreparedStatement q2 = connection.prepareStatement("SELECT * FROM `" + MainBungee.SQLPREFIX +
-                    "player` WHERE `team_id` = '" + q.getResultSet().getString("dest_id") + "';");
-            q2.execute();
-            ArrayList<String> teamMembers = new ArrayList<>();
-            while (q2.getResultSet().next()) {
-                teamMembers.add(q2.getResultSet().getString("uuid"));
-            }
-            q2.close();
-            if (pString.equalsIgnoreCase("all")) {
-                for (ProxiedPlayer onlineP : ProxyServer.getInstance().getPlayers()) {
-                    if (teamMembers.contains(onlineP.getUniqueId().toString()) || MainBungee.profiles.get(onlineP.getUniqueId()).isModson()) {
-                        onlineP.sendMessage(teamMsg);
-                    }
-                }
-            } else {
-                ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pString);
-                if(player != null && (teamMembers.contains(player.getUniqueId().toString()) ||
-                        MainBungee.profiles.get(player.getUniqueId()).isModson())) {
-                    player.sendMessage(teamMsg);
+        ArrayList<UUID> membres = new ArrayList<>();
+        for (Profil memberProfil: team.getMembers()) membres.add(memberProfil.getUuid());
+        if (pString.equalsIgnoreCase("all")) {
+            for (ProxiedPlayer onlineP : ProxyServer.getInstance().getPlayers()) {
+                if (membres.contains(onlineP.getUniqueId()) || MainBungee.profiles.get(onlineP.getUniqueId()).isModson()) {
+                    onlineP.sendMessage(teamMsg);
                 }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } else {
+            ProxiedPlayer player = ProxyServer.getInstance().getPlayer(pString);
+            if(player != null && (membres.contains(player.getUniqueId()) ||
+                    MainBungee.profiles.get(player.getUniqueId()).isModson())) {
+                player.sendMessage(teamMsg);
+            }
         }
     }
 
@@ -352,11 +341,11 @@ public class ChatSend {
      * @param hover infos
      * @param pString joueur cible (Ou all)
      */
-    private void eventMessage(PreparedStatement q, String hover, String pString) throws SQLException {
+    private void eventMessage(PreparedStatement q, String hover, String pString, Profil profil) throws SQLException {
         TextComponent ModsMsg = new TextComponent("§6[Event]");
         ModsMsg.addExtra(chatFormat.chatModsBuilder(
-                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
-                q.getResultSet().getString("name"),
+                Prefix.getPrefix(profil.getUuid()),
+                profil.getName(),
                 ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg")),
                 hover,
                 q.getResultSet().getString("remove_by") + "",
@@ -365,8 +354,8 @@ public class ChatSend {
         // Message pour joueur
         TextComponent PlayerMsg = new TextComponent("§6[Event]");
         PlayerMsg.addExtra(chatFormat.chatPlayerBuilder(
-                Prefix.getPrefix(UUID.fromString(q.getResultSet().getString("sender.uuid"))),
-                q.getResultSet().getString("name"),
+                Prefix.getPrefix(profil.getUuid()),
+                profil.getName(),
                 ChatColor.translateAlternateColorCodes('&', q.getResultSet().getString("msg")),
                 hover,
                 q.getResultSet().getString("remove_by") + ""));
