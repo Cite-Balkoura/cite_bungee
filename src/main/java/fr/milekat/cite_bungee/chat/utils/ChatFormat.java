@@ -24,13 +24,14 @@ public class ChatFormat {
      * @param date Date du message
      * @return String pour Hover
      */
-    public String infoPlayerBuilder(String name, String rank, String team_name, String money, String player_pts_event, String date){
+    public String infoPlayerBuilder(String name, String rank, String team_name, String money, int player_pts_event, int player_pts_quete, String date){
         String str = MainBungee.prefixCmd + System.lineSeparator() +
                 "&6Pseudo&c: &r" + name + System.lineSeparator() +
                 "&6Grade&c: &r" + rank + System.lineSeparator() +
                 "&6Équipe&c: &2" + team_name + System.lineSeparator() +
                 "&6Émeraudes&c: &2" + money + System.lineSeparator() +
-                "&6Pts Event&c: &2" + player_pts_event;
+                "&6Points Event&c: &2" + player_pts_event + System.lineSeparator() +
+                "&6Points Quête&c: &2" + player_pts_quete;
         if (date != null){
             str = str + System.lineSeparator() + ChatColor.GRAY + date.substring(0, 5) + " " + date.substring(11);
         }
@@ -223,25 +224,33 @@ public class ChatFormat {
         String query = "SELECT chat.msg_id as msg_id, chat.msg as msg, chat.msg_type as msg_type, chat.date_msg as date_msg, " +
                 "chat.dest_id as dest_id, removeby.name as remove_by, " +
                 //-- Sender info
-                "sender.name, sender.uuid, sender.player_pts_event, sender.muted as muted, " +
+                "sender.name, sender.uuid, sender.muted as muted, " +
+                /*
                 "COALESCE(senderT.team_name, 'Pas d''équipe') as team_name, " +
                 "COALESCE(senderT.team_tag, 'Pas d''équipe') as team_tag, COALESCE(senderT.money, 'Pas d''équipe') as money, " +
+                */
                 //-- Dest info
-                "dest.name as dest_name, dest.uuid as dest_uuid, dest.player_pts_event as dest_player_pts_event, dest.muted as dest_muted, " +
-                "COALESCE(destT.team_name, 'Pas d''équipe') as dest_team_name, COALESCE(destT.team_tag, 'Pas d''équipe') as dest_team_tag, " +
+                "dest.name as dest_name, dest.uuid as dest_uuid, dest.muted as dest_muted/*,*/ " +
+                /*
+                "COALESCE(destT.team_name, 'Pas d''équipe') as dest_team_name, " +
+                "COALESCE(destT.team_tag, 'Pas d''équipe') as dest_team_tag, " +
                 "COALESCE(destT.money, 'Pas d''équipe') as dest_money " +
+                */
                 "FROM `" + MainBungee.SQLPREFIX + "chat` chat " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` sender ON chat.player_id = sender.player_id " +
-                "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` dest ON chat.dest_id = dest.player_id " +/*
+                "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` dest ON chat.dest_id = dest.player_id " +
+                /*
                 "LEFT JOIN luckperms_players senderLP ON sender.uuid = senderLP.uuid " +
                 "LEFT JOIN luckperms_groups senderLG ON senderLP.primary_group = senderLG.name " +
                 "LEFT JOIN luckperms_players destLP ON dest.uuid = destLP.uuid " +
-                "LEFT JOIN luckperms_groups destLG ON destLP.primary_group = destLG.name " +*/
+                "LEFT JOIN luckperms_groups destLG ON destLP.primary_group = destLG.name " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "team` senderT ON sender.team_id = senderT.team_id " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "team` destT ON dest.team_id = destT.team_id " +
+                */
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` removeby ON chat.remove_by = removeby.player_id " +
                 "WHERE chat.msg_id > (SELECT `msg_id` FROM " +
-                "(SELECT `msg_id` FROM `" + MainBungee.SQLPREFIX + "chat` WHERE `msg_type` = 1 OR `msg_type` = 3 OR `msg_type` = 4 OR `msg_type` = 5 " +
+                "(SELECT `msg_id` FROM `" + MainBungee.SQLPREFIX + "chat` " +
+                "WHERE `msg_type` = 1 OR `msg_type` = 3 OR `msg_type` = 4 OR `msg_type` = 5 " +
                 "ORDER BY msg_id DESC LIMIT " + NbMsg + ") AS `chat` " +
                 "ORDER BY `msg_id` ASC LIMIT 1) ORDER BY chat.msg_id ASC;";
         try {
@@ -265,22 +274,29 @@ public class ChatFormat {
         String query = "SELECT chat.msg_id as msg_id, chat.msg as msg, chat.msg_type as msg_type, chat.date_msg as date_msg, " +
                 "chat.dest_id as dest_id, removeby.name as remove_by, " +
                 //-- Sender info
-                "sender.name, sender.uuid, sender.player_pts_event, sender.muted, " +
+                "sender.uuid, sender.muted, " +
+                /*
                 "COALESCE(senderT.team_name, 'Pas d''équipe') as team_name, " +
                 "COALESCE(senderT.team_tag, 'Pas d''équipe') as team_tag, COALESCE(senderT.money, 'Pas d''équipe') as money, " +
+                */
                 //-- Dest info
-                "dest.name as dest_name, dest.uuid as dest_uuid, dest.player_pts_event as dest_player_pts_event, dest.muted as dest_muted, " +
-                "COALESCE(destT.team_name, 'Pas d''équipe') as dest_team_name, COALESCE(destT.team_tag, 'Pas d''équipe') as dest_team_tag, " +
+                "dest.uuid as dest_uuid, dest.muted as dest_muted/*,*/ " +
+                /*
+                "COALESCE(destT.team_name, 'Pas d''équipe') as dest_team_name, " +
+                "COALESCE(destT.team_tag, 'Pas d''équipe') as dest_team_tag, " +
                 "COALESCE(destT.money, 'Pas d''équipe') as dest_money " +
+                */
                 "FROM `" + MainBungee.SQLPREFIX + "chat` chat " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` sender ON chat.player_id = sender.player_id " +
-                "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` dest ON chat.dest_id = dest.player_id " +/*
+                "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` dest ON chat.dest_id = dest.player_id " +
+                /*
                 "LEFT JOIN luckperms_players senderLP ON sender.uuid = senderLP.uuid " +
                 "LEFT JOIN luckperms_groups senderLG ON senderLP.primary_group = senderLG.name " +
                 "LEFT JOIN luckperms_players destLP ON dest.uuid = destLP.uuid " +
-                "LEFT JOIN luckperms_groups destLG ON destLP.primary_group = destLG.name " +*/
+                "LEFT JOIN luckperms_groups destLG ON destLP.primary_group = destLG.name " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "team` senderT ON sender.team_id = senderT.team_id " +
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "team` destT ON dest.team_id = destT.team_id " +
+                */
                 "LEFT JOIN `" + MainBungee.SQLPREFIX + "player` removeby ON chat.remove_by = removeby.player_id " +
                 "WHERE chat.msg_id = ? ORDER BY chat.msg_id ASC;";
         try {

@@ -28,8 +28,8 @@ public class Chat extends Command implements TabExecutor {
         Connection connection = MainBungee.getInstance().getSql().getConnection();
         UUID pUuid = ((ProxiedPlayer) sender).getUniqueId();
         try {
-            PreparedStatement q = connection.prepareStatement("UPDATE `" + MainBungee.SQLPREFIX +
-                    "player` SET `chat_mode` = ? WHERE `player`.`uuid` = ?;");
+            PreparedStatement q = connection.prepareStatement(
+                    "UPDATE `" + MainBungee.SQLPREFIX + "player` SET `chat_mode` = ? WHERE `uuid` = ?;");
             switch (args[0].toLowerCase()) {
                 case "all":
                 {

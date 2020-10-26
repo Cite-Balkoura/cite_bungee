@@ -10,10 +10,12 @@ import fr.milekat.cite_bungee.core.commands.*;
 import fr.milekat.cite_bungee.core.engines.BanEngine;
 import fr.milekat.cite_bungee.core.engines.Classements;
 import fr.milekat.cite_bungee.core.engines.PlayersEngine;
+import fr.milekat.cite_bungee.core.engines.TeamsEngine;
 import fr.milekat.cite_bungee.core.events.JoinLeaveEvent;
 import fr.milekat.cite_bungee.core.events.PlayerPing;
 import fr.milekat.cite_bungee.core.jedis.JedisSub;
 import fr.milekat.cite_bungee.core.obj.Profil;
+import fr.milekat.cite_bungee.core.obj.Team;
 import fr.milekat.cite_bungee.utils_tools.DateMilekat;
 import fr.milekat.cite_bungee.utils_tools.MariaManage;
 import net.md_5.bungee.api.ProxyServer;
@@ -40,11 +42,13 @@ public class MainBungee extends Plugin {
     public static boolean jedisDebug;
     public static boolean logDebug;
     public static ArrayList<UUID> approbationList = new ArrayList<>();
-    public static HashMap<UUID, Profil> profiles = new HashMap<>();
     public static HashMap<String, UUID> joueurslist = new HashMap<>();
+    public static HashMap<UUID, Profil> profiles = new HashMap<>();
+    public static HashMap<Integer, Team> teams = new HashMap<>();
     // Engines
     private ScheduledTask banTask;
     private ScheduledTask profilesTask;
+    private ScheduledTask teamTask;
 
     // Chat
     public static HashMap<String, String> linkToken = new HashMap<>();
@@ -95,6 +99,9 @@ public class MainBungee extends Plugin {
         // Engines
         profilesTask = new PlayersEngine().runTask();
         banTask = new BanEngine().runTask();
+        teamTask = new TeamsEngine().runTask();
+        new PlayersEngine().updateProfiles();
+        new TeamsEngine().updateTeams();
         // Events
         pm.registerListener(this, new JoinLeaveEvent());
         pm.registerListener(this, new PlayerPing());
@@ -116,7 +123,7 @@ public class MainBungee extends Plugin {
         pm.registerCommand(this, new Mute());
         pm.registerCommand(this, new UnMute());
         pm.registerCommand(this, new RemoveMsg());
-        pm.registerCommand(this, new Message());
+        pm.registerCommand(this, new PrivateMessage());
         pm.registerCommand(this, new Reply());
         pm.registerCommand(this, new TeamChat());
         pm.registerCommand(this, new UrlCmd());
@@ -158,6 +165,7 @@ public class MainBungee extends Plugin {
         muteTask.cancel();
         banTask.cancel();
         profilesTask.cancel();
+        teamTask.cancel();
         classmenets.cancel();
         subscriber.unsubscribe();
         sql.disconnect();

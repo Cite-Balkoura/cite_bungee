@@ -3,19 +3,22 @@ package fr.milekat.cite_bungee.core.obj;
 import java.util.UUID;
 
 public class Profil {
+    private final int id;
     private final UUID uuid;
-    private String name;
-    private int team;
+    private final String name;
+    private final int team;
     private int chat_mode;
     private String muted;
     private String banned;
     private String reason;
     private boolean modson;
-    private int ptsevent;
-    private boolean maintenance;
-    private long discordid;
+    private final boolean maintenance;
+    private final long discordid;
+    private final int points_quest;
+    private final int points_event;
 
-    public Profil(UUID uuid, String name, int team, int chat_mode, String muted, String banned, String reason, boolean modson, int ptsevent, boolean maintenance, long discordid) {
+    public Profil(int id, UUID uuid, String name, int team, int chat_mode, String muted, String banned, String reason, boolean modson, boolean maintenance, long discordid, int points_quest, int points_event) {
+        this.id = id;
         this.uuid = uuid;
         this.name = name;
         this.team = team;
@@ -24,9 +27,14 @@ public class Profil {
         this.banned = banned;
         this.reason = reason;
         this.modson = modson;
-        this.ptsevent = ptsevent;
         this.maintenance = maintenance;
         this.discordid = discordid;
+        this.points_quest = points_quest;
+        this.points_event = points_event;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public UUID getUuid() {
@@ -37,16 +45,8 @@ public class Profil {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getTeam() {
         return team;
-    }
-
-    public void setTeam(int team) {
-        this.team = team;
     }
 
     public int getChat_mode() {
@@ -81,20 +81,8 @@ public class Profil {
         this.modson = modson;
     }
 
-    public int getPtsevent() {
-        return ptsevent;
-    }
-
-    public void setPtsevent(int ptsevent) {
-        this.ptsevent = ptsevent;
-    }
-
     public boolean isMaintenance() {
         return maintenance;
-    }
-
-    public void setMaintenance(boolean maintenance) {
-        this.maintenance = maintenance;
     }
 
     public boolean isMute(){
@@ -109,15 +97,19 @@ public class Profil {
         return discordid;
     }
 
-    public void setDiscordid(long discordid) {
-        this.discordid = discordid;
-    }
-
     public String getReason() {
         return reason;
     }
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public int getPoints_quest() {
+        return points_quest;
+    }
+
+    public int getPoints_event() {
+        return points_event;
     }
 }

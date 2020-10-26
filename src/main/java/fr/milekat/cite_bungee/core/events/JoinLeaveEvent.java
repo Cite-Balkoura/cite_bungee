@@ -31,7 +31,7 @@ public class JoinLeaveEvent implements Listener {
     @EventHandler
     public void onTryJoin(LoginEvent event) {
         UUID uuid = event.getConnection().getUniqueId();
-        if (MainBungee.opendate.getTime() > new Date().getTime()) {
+        if (MainBungee.opendate!=null && MainBungee.opendate.getTime() > new Date().getTime()) {
             if (!MainBungee.profiles.containsKey(uuid) || !MainBungee.profiles.get(uuid).isMaintenance()) {
                 event.setCancelReason(new TextComponent(MainBungee.prefixCmd
                         + System.lineSeparator() +
