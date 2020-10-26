@@ -178,6 +178,10 @@ public class ChatFormat {
         return id;
     }
 
+    public void rien() {
+        //Rien
+    }
+
     /**
      *      Insert d'un nouveau MSG Team
      * @param p le joueur
