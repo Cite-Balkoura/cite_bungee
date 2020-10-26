@@ -69,10 +69,6 @@ public class MainBungee extends Plugin {
     private MariaManage sql;
     private final PluginManager pm = ProxyServer.getInstance().getPluginManager();
 
-    public void nullll() {
-       //hggrdgf
-    }
-
     @Override
     public void onEnable(){
         mainBungee = this;
