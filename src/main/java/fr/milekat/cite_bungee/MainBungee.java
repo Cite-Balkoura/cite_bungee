@@ -30,6 +30,9 @@ import redis.clients.jedis.Jedis;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 public class MainBungee extends Plugin {
@@ -138,7 +141,8 @@ public class MainBungee extends Plugin {
         subscriber = new JedisSub();
         new Thread(() -> {
             try {
-                jedis.subscribe(subscriber, "discord", "cite", "event", "survie", "bungee");
+                if (jedisDebug) log("Load Jedis channels");
+                jedis.subscribe(subscriber, getJedisChannels());
             } catch (Exception e) {
                 MainBungee.warning("Subscribing failed : " + e);
             }
@@ -212,5 +216,19 @@ public class MainBungee extends Plugin {
             }
         }
         return MySortStrings;
+    }
+
+    private String[] getJedisChannels() {
+        try {
+            Connection connection = sql.getConnection();
+            PreparedStatement q = connection.prepareStatement("SELECT * FROM `balkoura_redis_channels`");
+            q.execute();
+            ArrayList<String> jedisChannels = new ArrayList<>();
+            while (q.getResultSet().next()) { jedisChannels.add(q.getResultSet().getString("channel")); }
+            return jedisChannels.toArray(new String[0]);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 }
