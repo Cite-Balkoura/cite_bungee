@@ -128,6 +128,8 @@ public class MainBungee extends Plugin {
         pm.registerCommand(this, new UrlCmd());
         pm.registerCommand(this, new NoChat());
         pm.registerCommand(this, new Maintenance());
+        pm.registerCommand(this, new AddCrate());
+        pm.registerCommand(this, new PrivateAnnounce());
         // Engines
         annoncesTask = new Annonces().runTask();
         antispamTask = new AntiSpam().runTask();
