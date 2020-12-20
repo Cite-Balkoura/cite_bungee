@@ -32,7 +32,7 @@ public class ChatSend {
         try {
             PreparedStatement q = chatFormat.getFullChat(nbMsg);
             while (q.getResultSet().next()) {
-                sendSingleMessage(q, p, false);
+                sendSingleMessage(q, p, true);
             }
             q.close();
         } catch (SQLException throwables) {

@@ -38,7 +38,7 @@ public class PlayerPing implements Listener {
         } else {
             ping.setDescriptionComponent(new TextComponent(
                     MainBungee.prefixCmd + "§6Évent cité au §2émeraudes §b[EN COURS]§c.\n" +
-                    "§6Web§c: §b§nweb.cite-balkoura.fr§6 - jusqu'au §c31/10/2020"));
+                    "§6Web§c: §b§nweb.cite-balkoura.fr§6 - jusqu'au §c27/12/2020"));
         }
         event.setResponse(ping);
     }

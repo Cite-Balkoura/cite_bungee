@@ -32,15 +32,17 @@ public class Reply extends Command {
         ChatSend chatSend = new ChatSend();
         Connection connection = MainBungee.getInstance().getSql().getConnection();
         try {
-            PreparedStatement q = connection.prepareStatement("SELECT `msg_id`, `dest_id` FROM `" +
-                    MainBungee.SQLPREFIX + "chat` WHERE `msg_type` = '2' AND `player_id` = " +
-                    "(SELECT `player_id` FROM `" + MainBungee.SQLPREFIX + "player` WHERE `uuid` = '" + p.getUniqueId() +
+            PreparedStatement q = connection.prepareStatement("SELECT c.`msg_id`, c.`dest_id`, p.`name` " +
+                    "FROM `balkoura_chat` c LEFT JOIN `balkoura_player` p ON c.dest_id=p.player_id " +
+                    "WHERE c.`msg_type` = '2' AND c.`player_id` = " +
+                    "(SELECT `player_id` FROM `balkoura_player` WHERE `uuid` = '" + p.getUniqueId() +
                     "') ORDER BY `msg_id` DESC LIMIT 0, 1");
             q.execute();
-            PreparedStatement q2 = connection.prepareStatement("SELECT `msg_id`, `player_id` " +
-                    "FROM `" + MainBungee.SQLPREFIX + "chat` WHERE `msg_type` = '2' AND `dest_id` = " +
-                    "(SELECT `player_id` FROM `" + MainBungee.SQLPREFIX + "player` WHERE `uuid` = '" + p.getUniqueId() +
-                            "') ORDER BY `msg_id` DESC LIMIT 0, 1");
+            PreparedStatement q2 = connection.prepareStatement("SELECT c.`msg_id`, c.`player_id`, p.`name` " +
+                    "FROM `balkoura_chat` c LEFT JOIN `balkoura_player` p ON c.dest_id=p.player_id " +
+                    "WHERE c.`msg_type` = '2' AND c.`dest_id` = " +
+                    "(SELECT `player_id` FROM `balkoura_player` WHERE `uuid` = '" + p.getUniqueId() +
+                    "') ORDER BY `msg_id` DESC LIMIT 0, 1");
             q2.execute();
             if (!q.getResultSet().last() && !q2.getResultSet().last()) {
                 sender.sendMessage(new TextComponent(MainBungee.prefixCmd + "§cAucun correspondant trouvé."));
@@ -51,10 +53,13 @@ public class Reply extends Command {
             q.getResultSet().last();
             q2.getResultSet().last();
             String destId;
+            String destname;
             if (q.getResultSet().getInt(1) > q2.getResultSet().getInt(1)) {
                 destId = q.getResultSet().getString("dest_id");
+                destname = q.getResultSet().getString("name");
             } else {
                 destId = q2.getResultSet().getString("player_id");
+                destname = q.getResultSet().getString("name");
             }
             StringBuilder sb = new StringBuilder();
             for (String loop : args) {
@@ -65,7 +70,7 @@ public class Reply extends Command {
             q.close();
             // Send du message au joueur, au dest et au réseau (rédis)
             chatSend.sendChatFor(sender.getName(), id, false);
-            chatSend.sendChatFor(args[0], id, true);
+            chatSend.sendChatFor(destname, id, true);
             JedisPub.sendRedis("new_mp#:#" + id);
         } catch (SQLException throwables) {
             MainBungee.warning(MainBungee.prefixCmd + "Erreur SQL commande reply.");

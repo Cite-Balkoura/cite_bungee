@@ -73,6 +73,7 @@ public class UnMute extends Command implements TabExecutor {
                 player.sendMessage(new TextComponent(MainBungee.prefixCmd + "§2Vous n'êtes plus mute !"
                                 + System.lineSeparator() + "§6Soyez plus vigilant à l'avenir !"));
             }
+            MainBungee.profiles.get(targetid).setMuted("pas mute");
         } catch (SQLException throwables) {
             MainBungee.warning("Erreur SQL lors de l'unmute de: " + args[0]);
             if (MainBungee.logDebug) throwables.printStackTrace();

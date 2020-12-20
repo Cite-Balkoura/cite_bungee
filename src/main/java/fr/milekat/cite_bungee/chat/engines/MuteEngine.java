@@ -32,7 +32,7 @@ public class MuteEngine {
                     UUID uuid = UUID.fromString(q.getResultSet().getString("uuid"));
                     if (time!=null && time.getTime() < System.currentTimeMillis()){
                         PreparedStatement q2 = connection.prepareStatement("UPDATE `" + MainBungee.SQLPREFIX +
-                                "player` SET `muted` = 'pas mute' WHERE `player`.`uuid` = ?;");
+                                "player` SET `muted` = 'pas mute' WHERE `uuid` = ?;");
                         q2.setString(1, uuid.toString());
                         q2.execute();
                         q2.close();

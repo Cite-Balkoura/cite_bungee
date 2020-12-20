@@ -86,7 +86,7 @@ public class ChatFormat {
                 TextComponent unMuteButton = new TextComponent(" [UNMUTE]");
                 unMuteButton.setColor(ChatColor.RED);
                 unMuteButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.RED + "Unmute le joueur")));
-                unMuteButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unmute " + sender));
+                unMuteButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unmute " + sender + " fastunmute"));
                 Chat.addExtra(unMuteButton);
             }
         } else {

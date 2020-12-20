@@ -142,7 +142,7 @@ public class JoinLeaveEvent implements Listener {
             q.setString(3, pUuid.toString());
             q.execute();
             q.getResultSet().last();
-            new ChatSend().sendChatFor("all",q.getResultSet().getInt("msg_id"),false);
+            new ChatSend().sendChatFor("all",q.getResultSet().getInt("msg_id"),true);
             q.close();
         } catch (SQLException throwables) {
             MainBungee.warning("Erreur SQL onProxyJoined.");
