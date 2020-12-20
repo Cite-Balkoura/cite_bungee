@@ -1,4 +1,4 @@
-package fr.milekat.cite_bungee.chat.commands;
+package fr.milekat.cite_bungee.core.commands;
 
 import fr.milekat.cite_bungee.MainBungee;
 import fr.milekat.cite_bungee.chat.utils.ChatSend;

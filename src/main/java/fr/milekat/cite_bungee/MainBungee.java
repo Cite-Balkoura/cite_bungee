@@ -115,6 +115,7 @@ public class MainBungee extends Plugin {
         pm.registerListener(this, new ChatMsg());
         pm.registerListener(this, new ChatSubscribe());
         // Commandes
+        pm.registerCommand(this, new TeleportBungee());
         pm.registerCommand(this, new SendClassements());
         pm.registerCommand(this, new Broadcast());
         pm.registerCommand(this, new Chat());
