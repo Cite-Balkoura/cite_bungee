@@ -37,7 +37,7 @@ public class JoinLeaveEvent implements Listener {
                         + System.lineSeparator() +
                         "§cServeur en préparation !"
                         + System.lineSeparator() +
-                        "§6Délais avant l'ouverture§c: §b" + DateMilekat.reamingToStrig(MainBungee.opendate) + "§c."
+                        "§6Délais avant l'ouverture§c: §b" + DateMilekat.reamingToString(MainBungee.opendate) + "§c."
                         + System.lineSeparator() +
                         "§6En attendant vous pouvez visiter notre site :D"
                         + System.lineSeparator() +
@@ -52,7 +52,7 @@ public class JoinLeaveEvent implements Listener {
                         + System.lineSeparator() +
                         "§cServeur en maintenance !"
                         + System.lineSeparator() +
-                        "§6Délais avant la ré-ouverture§c: §b" + DateMilekat.reamingToStrig(MainBungee.maintenance) + "§c."
+                        "§6Délais avant la ré-ouverture§c: §b" + DateMilekat.reamingToString(MainBungee.maintenance) + "§c."
                         + System.lineSeparator() +
                         "§6En attendant vous pouvez visiter notre site :D"
                         + System.lineSeparator() +
@@ -110,7 +110,7 @@ public class JoinLeaveEvent implements Listener {
                         + System.lineSeparator() +
                         "§e" + MainBungee.profiles.get(uuid).getReason()
                         + System.lineSeparator() +
-                        "§6Délais de suspension restant§c: §b" + DateMilekat.reamingToStrig(ban) + "§c."
+                        "§6Délais de suspension restant§c: §b" + DateMilekat.reamingToString(ban) + "§c."
                         + System.lineSeparator() +
                         "§6Vous pouvez faire appel de cette décision directement sur §9Discord§c:"
                         + System.lineSeparator() +

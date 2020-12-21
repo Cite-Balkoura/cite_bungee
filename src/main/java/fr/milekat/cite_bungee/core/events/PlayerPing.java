@@ -23,7 +23,7 @@ public class PlayerPing implements Listener {
             ping.getVersion().setName("En préparation");
             ping.getPlayers().setSample(new ServerPing.PlayerInfo[]{
                     new ServerPing.PlayerInfo("§6Ouverture dans§c:", ""),
-                    new ServerPing.PlayerInfo("§b" + DateMilekat.reamingToStrig(MainBungee.opendate), "")
+                    new ServerPing.PlayerInfo("§b" + DateMilekat.reamingToString(MainBungee.opendate), "")
             });
         } else if (MainBungee.maintenance!=null && MainBungee.maintenance.getTime() > new Date().getTime()) {
             ping.setDescriptionComponent(new TextComponent(
@@ -33,7 +33,7 @@ public class PlayerPing implements Listener {
             ping.getVersion().setName("En maintenance");
             ping.getPlayers().setSample(new ServerPing.PlayerInfo[]{
                     new ServerPing.PlayerInfo("§6Ré-ouverture dans§c:", ""),
-                    new ServerPing.PlayerInfo("§b" + DateMilekat.reamingToStrig(MainBungee.maintenance), "")
+                    new ServerPing.PlayerInfo("§b" + DateMilekat.reamingToString(MainBungee.maintenance), "")
             });
         } else {
             ping.setDescriptionComponent(new TextComponent(

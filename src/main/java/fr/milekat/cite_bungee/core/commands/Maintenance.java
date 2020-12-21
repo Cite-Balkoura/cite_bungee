@@ -42,14 +42,14 @@ public class Maintenance extends Command {
                         + System.lineSeparator() +
                         "§cServeur en maintenance !"
                         + System.lineSeparator() +
-                        "§6Délais avant la ré-ouverture§c: §b" + DateMilekat.reamingToStrig(MainBungee.maintenance) + "§c."
+                        "§6Délais avant la ré-ouverture§c: §b" + DateMilekat.reamingToString(MainBungee.maintenance) + "§c."
                         + System.lineSeparator() +
                         "§6En attendant vous pouvez visiter notre site :D"
                         + System.lineSeparator() +
                         "§b§nweb.cite-balkoura.fr"));
             }
         }
-        sender.sendMessage(new TextComponent("Maintenance activée pour: " + DateMilekat.reamingToStrig(MainBungee.maintenance)));
+        sender.sendMessage(new TextComponent("Maintenance activée pour: " + DateMilekat.reamingToString(MainBungee.maintenance)));
     }
 
     /**

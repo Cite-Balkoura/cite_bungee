@@ -85,7 +85,7 @@ public class ChatMsg implements Listener {
      * @param player joueur
      */
     private void warnMute(ProxiedPlayer player) {
-        String str = DateMilekat.reamingToStrig(DateMilekat.getDate(MainBungee.profiles.get(player.getUniqueId()).getMuted()));
+        String str = DateMilekat.reamingToString(DateMilekat.getDate(MainBungee.profiles.get(player.getUniqueId()).getMuted()));
         TextComponent Mute = new TextComponent(MainBungee.prefixCmd + "§6Vous serez unmute dans §b" + str + "§c.");
         Mute.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new Text("§cLes modos peuvent" +
                 System.lineSeparator() + "encore voir vos" + System.lineSeparator() + "messages")));

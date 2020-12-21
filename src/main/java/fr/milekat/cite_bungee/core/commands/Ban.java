@@ -142,7 +142,7 @@ public class Ban extends Command implements TabExecutor {
                     + System.lineSeparator() +
                     "§e" + reason
                     + System.lineSeparator() +
-                    "§6Délais de suspension restant§c: §b" + DateMilekat.reamingToStrig(ban) + "§c."
+                    "§6Délais de suspension restant§c: §b" + DateMilekat.reamingToString(ban) + "§c."
                     + System.lineSeparator() +
                     "§6Vous pouvez faire appel de cette décision directement sur §9Discord§c:"
                     + System.lineSeparator() +

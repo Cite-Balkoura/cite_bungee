@@ -101,7 +101,7 @@ public class DateMilekat {
      *      Envoie le temps entre restant avant Date !
      * @param date joueur
      */
-    public static String reamingToStrig(Date date) {
+    public static String reamingToString(Date date) {
         HashMap<String, String> reamingMute = DateMilekat.getReamingTime(date, new Date());
         String time = "";
         if (!reamingMute.get("D").equals("0")) {
